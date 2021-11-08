@@ -15,3 +15,4 @@ indexvalue = list2[2:6]
 print(f"The Index values are : {indexvalue}")
 
 print("Parthiban")
+print("Deepak")
