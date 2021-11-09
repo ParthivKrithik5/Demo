@@ -1,12 +1,12 @@
 pipeline {
     options {
-        buildDiscarder(logRotator(numToKeepStr: '10')) // Retain history on the last 10 builds
-        ansiColor('xterm') // Enable colors in terminal
-        timestamps() // Append timestamps to each line
-        timeout(time: 20, unit: 'MINUTES') // Set a timeout on the total execution time of the job
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        ansiColor('xterm')
+        timestamps() 
+        timeout(time: 20, unit: 'MINUTES')
     }
-    agent
-    anyparameters {
+    agent any
+    parameters {
         string(name: 'DEPLOY_APP', default: 'force-web', description: 'Deploy this application or service')
         string(name: 'DEPLOY_VER', description: 'Deploy this version of the application or service')
         string(name: 'DEPLOY_ENV', default: 'dev', description: 'Deploy to this environment')
@@ -32,14 +32,6 @@ pipeline {
                 bat 'python pipeline.py'
             }
             
-        }
-        post {
-            failure {
-                script {
-                    msg = "Build error for ${env.JOB_NAME} ${env.BUILD_NUMBER} (${env.BUILD_URL})"
-                    slackSend message: msg, channel: env.SLACK_CHANNEL
-                }
-            }
         }
         stage('Compile Stage'){
             steps{
